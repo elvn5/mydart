@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import './question.dart';
-import "./answer.dart";
+import 'package:flutter_complete_guide/Result.dart';
+import 'package:flutter_complete_guide/quiz.dart';
 
 void main() => runApp(Appka());
 
@@ -14,8 +13,10 @@ class Appka extends StatefulWidget {
 
 class _AppkaState extends State<Appka> {
   int _questionIndex = 0;
+  int _totalScore = 0;
 
-  void _answerQuestion() {
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       _questionIndex += 1;
     });
@@ -23,40 +24,39 @@ class _AppkaState extends State<Appka> {
 
   @override
   Widget build(BuildContext context) {
-    const questions = [
+    const _questions = [
       {
         "question": "What's is your favourite color?",
-        "answers": ["Black", "Green", "White", "Red"]
+        "answers": [
+          {"text": "Black", "score": 1},
+          {"text": "Green", "score": 1},
+          {"text": "White", "score": 1},
+        ]
       },
       {
         "question": "What's your favourite animal?",
-        "answers": ["Rabbit", "Snake", "Elephant", "Lion"]
+        "answers": [
+          {"text": "Rabbit", "score": 3},
+          {"text": "Lion", "score": 3},
+          {"text": "Wolf", "score": 4},
+        ]
       },
       {
         "question": "Who's your favourite instructor?",
         "answers": [
-          "Max",
-          "Max",
-          "Max",
-          "Max",
+          {"text": "Max", "score": 1},
+          {"text": "Max", "score": 30},
+          {"text": "Max", "score": 30},
         ]
       }
     ];
-    
-    var answers = (questions[_questionIndex]["answers"] as List<String>).map((answer) {
-      return Answer(selectHandler: _answerQuestion, answer: answer);
-    }).toList();
 
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("Hello Dart!")),
-        body: Column(
-          children: <Widget>[
-            Question(questionText: questions[_questionIndex]["question"] as String),
-            ...answers
-          ],
-        ),
-      ),
+        appBar: AppBar(title: const Text("Hello Dart!")),
+        body: _questionIndex < _questions.length ?
+        Quiz(questions: _questions, questionIndex: _questionIndex, selectHandler: _answerQuestion)
+            : Result(_totalScore),)
     );
   }
 }
