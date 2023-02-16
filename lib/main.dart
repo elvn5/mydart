@@ -15,6 +15,13 @@ class _AppkaState extends State<Appka> {
   int _questionIndex = 0;
   int _totalScore = 0;
 
+  void resetQuiz() {
+    setState(() {
+    _questionIndex = 0;
+    _totalScore = 0;
+    });
+  }
+
   void _answerQuestion(int score) {
     _totalScore += score;
     setState(() {
@@ -56,7 +63,7 @@ class _AppkaState extends State<Appka> {
         appBar: AppBar(title: const Text("Hello Dart!")),
         body: _questionIndex < _questions.length ?
         Quiz(questions: _questions, questionIndex: _questionIndex, selectHandler: _answerQuestion)
-            : Result(_totalScore),)
+            : Result(resultScore: _totalScore, resetHandler: resetQuiz,),)
     );
   }
 }
